@@ -1,0 +1,5 @@
+asset - lưu ảnh .png
+node modules - thư viện node js 
+app.json - 1 số thông tin ng dùng
+
+
