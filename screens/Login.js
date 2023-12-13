@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Signup from'./Signup';
@@ -21,8 +21,8 @@ const Login = ({ navigation }) => {
     console.log('Signing in with:', username, password);
     // You can add your authentication logic here
     try {
-      const response = await axios.post(`${SERVER_URL}/mobile/users/login`, {
-        email,
+      const response = await axios.post(`http://localhost:5005/mobile/users/login`, {
+        email : username,
         password,
       });
       const { success, message } = response.data;
@@ -30,7 +30,7 @@ const Login = ({ navigation }) => {
         navigation.navigate('Booking');
       } else {
         // Handle failed sign-in, show error message, etc.
-        Alert.alert('Sign In Failed', message);
+        Alert.alert('Sign In Failed', message || 'Unknown error occurred');
       }
     } catch (error) {
       console.error('Error signing in:', error.message);
@@ -103,11 +103,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  signupButtonText: {
-    marginTop: 16,
-    color: 'blue',  // Customize the color as needed
-    textDecorationLine: 'underline',
   },  
   signupButton: {
     marginTop: 16,
