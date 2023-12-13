@@ -6,8 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Signup from'./Signup';
 import axios from 'axios';  // Import axios for making HTTP requests
 
-//require('dotenv').config();//cac bien moi truong truyen vao trong process.env
-const SERVER_URL = 'http://localhost:5005/';
+require('dotenv').config();//cac bien moi truong truyen vao trong process.env
+const SERVER_URL = process.env.SERVER_URL;
 
 const Stack = createStackNavigator();
 
@@ -21,7 +21,7 @@ const Login = ({ navigation }) => {
     console.log('Signing in with:', username, password);
     // You can add your authentication logic here
     try {
-      const response = await axios.post(`${SERVER_URL}/mobile/users/login`, {
+      const response = await axios.post('${SERVER_URL}/mobile/users/login', {
         email,
         password,
       });
