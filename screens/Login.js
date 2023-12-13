@@ -25,12 +25,16 @@ const Login = ({ navigation }) => {
         email : username,
         password,
       });
-      const { success, message } = response.data;
-      if (success){
+      const { success, role, user } = response.data;
+      if (success && role == 'passenger'){
         navigation.navigate('Booking');
-      } else {
-        // Handle failed sign-in, show error message, etc.
+      } else { if(success && role == 'driver'){
+        navigation.navigate('Driver');
+
+      } else{
         Alert.alert('Sign In Failed', message || 'Unknown error occurred');
+      }
+        // Handle failed sign-in, show error message, etc.
       }
     } catch (error) {
       console.error('Error signing in:', error.message);

@@ -8,11 +8,60 @@ const Booking = () => {
   const [seats, setSeats] = useState('');
   const [pickupLocation, setPickupLocation] = useState('');
   const [dropoffLocation, setDropoffLocation] = useState('');
+  // Declare the latitude and longitude states for pickup and dropoff locations
+  const [pickupLatitude, setPickupLatitude] = useState(null);
+  const [pickupLongitude, setPickupLongitude] = useState(null);
+  const [dropoffLatitude, setDropoffLatitude] = useState(null);
+  const [dropoffLongitude, setDropoffLongitude] = useState(null);
+  
+  const getPickupGPS = async () => {
+    if (pickupLocation.trim() === '') return;
 
-  const handleBookNow = () => {
-    // Implement your booking logic here
-    console.log('Booking with:', name, phone, seats, pickupLocation, dropoffLocation);
-    // You can add your booking logic here
+    try {
+      const response = await axios.post('http://localhost:5005/mobile/passenger/gps', {
+        address: pickupLocation,
+      });
+
+      const { latitude, longitude } = response.data;
+      setPickupLatitude(latitude);
+      setPickupLongitude(longitude);
+    } catch (error) {
+      console.error('Error getting pickup GPS:', error.message);
+    }
+  };
+
+  
+  const handleBookNow = async () => {
+    try {
+      // Prepare the booking data
+      const bookingData = {
+        name,
+        phone,
+        seats,
+        pickupLocation,
+        dropoffLocation,
+        pickupLatitude,
+        pickupLongitude,
+        dropoffLatitude,
+        dropoffLongitude,
+      };
+
+      // Make a POST request to the mobile dispatcher endpoint
+      const response = await axios.post('http://localhost:5005/mobile/dispatcher/booking', bookingData);
+
+      const { success, message } = response.data;
+
+      if (success) {
+        // Handle successful booking, navigate to a success screen or show a success message
+        console.log('Booking successful!');
+      } else {
+        // Handle failed booking, show an error message, etc.
+        console.error('Booking failed:', message);
+      }
+    } catch (error) {
+      // Handle network error, server unreachable, etc.
+      console.error('Error booking:', error.message);
+    }
   };
 
   const handlePickupLocationChange = (text) => {
